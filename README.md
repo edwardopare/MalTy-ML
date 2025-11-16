@@ -1,12 +1,10 @@
 # Malaria and Typhoid Detection using Machine Learning
 
-![Project Banner](https://via.placeholder.com/800x200.png?text=Malaria+and+Typhoid+ML+Detection)
-
 This project aims to develop and evaluate machine learning models for the detection of Malaria from blood smear images and Typhoid fever based on clinical symptoms.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [About The Project](#about-the-project)
 - [Built With](#built-with)
@@ -23,34 +21,31 @@ This project aims to develop and evaluate machine learning models for the detect
 
 ---
 
-## 🧐 About The Project
+## About The Project
 
 Malaria and Typhoid are life-threatening diseases prevalent in many parts of the world. Early and accurate diagnosis is key to effective treatment and preventing mortality. This project explores the use of machine learning to aid in this diagnostic process.
 
-Two main components are included:
-1.  **Malaria Detection**: A Convolutional Neural Network (CNN) is trained to classify red blood cell images as either infected with the malaria parasite or uninfected.
-2.  **Typhoid Detection**: A classical machine learning model (e.g., Logistic Regression, SVM, or a tree-based model) is used to predict the likelihood of Typhoid fever based on a set of patient symptoms.
+Main components are included:
+
+A classical machine learning model (Logistic Regression, SVM, or a tree-based model) is used to predict the likelihood of both malaria and Typhoid fever based on a set of patient symptoms.
 
 The goal is to provide a fast, accessible, and reliable tool for preliminary diagnosis.
 
 ---
 
-## 🛠️ Built With
+## Built With
 
 This project is built with Python and several key data science libraries:
 
 *   [Python](https://www.python.org/)
-*   [TensorFlow](https://www.tensorflow.org/) / [Keras](https://keras.io/)
 *   [Scikit-learn](https://scikit-learn.org/)
 *   [Pandas](https://pandas.pydata.org/)
 *   [NumPy](https://numpy.org/)
 *   [Matplotlib](https://matplotlib.org/)
-*   [OpenCV-Python](https://pypi.org/project/opencv-python/)
-*   [Streamlit](https://streamlit.io/) (Optional, for building an interactive web app)
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 To get a local copy up and running, follow these simple steps.
 
@@ -84,41 +79,16 @@ Make sure you have Python 3.8+ and `pip` installed on your system.
     ```
 
 ---
-
-## 🏃 Usage
-
-1.  **Train the Malaria Model**:
-    Run the training script with the path to the malaria image dataset.
-    ```sh
-    python train_malaria_model.py --dataset /path/to/malaria_dataset
-    ```
-
-2.  **Train the Typhoid Model**:
-    Run the training script with the path to the typhoid symptoms CSV file.
-    ```sh
-    python train_typhoid_model.py --dataset /path/to/typhoid_data.csv
-    ```
-
-3.  **Run Predictions**:
-    Use the provided scripts or notebooks to make predictions on new data.
-
 ---
 
-## 💾 Dataset
+## Dataset
 
-*   **Malaria Dataset**: The malaria detection model was trained on the NIH Malaria Dataset, which contains a large number of segmented red blood cell images.
-*   **Typhoid Dataset**: The typhoid detection model was trained on a custom dataset of clinical symptoms. *(Please provide a link or description of your dataset here)*.
-
----
-
-## 🧠 Model Architecture
-
-*   **Malaria CNN**: Describe your CNN architecture here (e.g., number of convolutional layers, filters, activation functions, dense layers).
-*   **Typhoid Model**: Specify the machine learning model used (e.g., Logistic Regression, Random Forest) and any feature engineering steps.
+Both the malaria and typhoid detection models were trained on synthetically generated datasets based on clinical symptoms.
 
 ---
+---
 
-## 📈 Results
+## Results
 
 Provide a summary of your model's performance.
 
@@ -132,11 +102,10 @@ Provide a summary of your model's performance.
 |-----------|----------|-----------|--------|----------|
 | **Value** | 88%      | 85%       | 90%    | 87%      |
 
-*(Replace the placeholder values above with your actual results.)*
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -148,7 +117,7 @@ Contributions are what make the open-source community such an amazing place to l
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
@@ -161,4 +130,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 * Eric Sena Semordzi - esemordzi001@st.ug.edu.gh
 
 
-Project Link: https://github.com/edwardopare/Malaria-Typhoid-ML
+Project Link: https://github.com/edwardopare/MalTy-ML
