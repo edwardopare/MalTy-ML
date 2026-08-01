@@ -1,133 +1,149 @@
-# Malaria and Typhoid Detection using Machine Learning
+# Malaria, Typhoid, and Co-Infection Classification
 
-This project aims to develop and evaluate machine learning models for the detection of Malaria from blood smear images and Typhoid fever based on clinical symptoms.
+This repository explores a machine-learning workflow for classifying synthetic
+records into three labels:
 
----
+- `Malaria`
+- `Typhoid`
+- `Both` (co-infection)
 
-## Table of Contents
+The predictors are reported symptom flags plus temperature and heart rate. The
+project is a methodological demonstration built on synthetic data; it is not a
+clinically validated diagnostic system and must not be used to diagnose or
+treat patients.
 
-- [About The Project](#about-the-project)
-- [Built With](#built-with)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Dataset](#-dataset)
-- [Model Architecture](#-model-architecture)
-- [Results](#-results)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
+## Repository contents
 
----
+```text
+dataset/
+  generate_dataset.ipynb
+  synthetic_malaria_typhoid_dataset.csv
+modelling/
+  Notebook.ipynb
+  plots/
+requirement.txt
+README.md
+```
 
-## About The Project
+- `dataset/generate_dataset.ipynb` generates the synthetic dataset.
+- `dataset/synthetic_malaria_typhoid_dataset.csv` contains 50,000 synthetic
+  records.
+- `modelling/Notebook.ipynb` contains exploratory analysis, model selection,
+  locked-holdout evaluation, and an in-memory inference check.
+- `modelling/plots/` contains existing SHAP plots from earlier experiments.
+  They are not outputs of the final three-model evaluation workflow.
 
-Malaria and Typhoid are life-threatening diseases prevalent in many parts of the world. Early and accurate diagnosis is key to effective treatment and preventing mortality. This project explores the use of machine learning to aid in this diagnostic process.
+## Modelling workflow
 
-Main components are included:
+The final workflow in `modelling/Notebook.ipynb`:
 
-A classical machine learning model (Logistic Regression, SVM, or a tree-based model) is used to predict the likelihood of both malaria and Typhoid fever based on a set of patient symptoms.
+1. detects binary symptom columns;
+2. uses those symptoms with `Temperature` and `Heart_Rate`;
+3. excludes `Platelet_Count`, `Noise`, `Symptom_Count`, `Total_Symptoms`, and
+   `Severity_Index` from modelling;
+4. creates a stratified 80/20 training and locked-holdout split;
+5. performs randomized hyperparameter search with five-fold stratified
+   cross-validation on the training partition; and
+6. evaluates the selected candidates on the holdout partition.
 
-The goal is to provide a fast, accessible, and reliable tool for preliminary diagnosis.
+The final comparison includes:
 
----
+- Logistic Regression
+- Random Forest
+- LightGBM
 
-## Built With
+Macro F1 is the cross-validation selection metric because the `Both` class is
+rare. The notebook also reports balanced accuracy, macro precision and recall,
+ROC AUC, average precision, log loss, per-class metrics, and a confusion
+matrix. In the saved notebook run, Logistic Regression was selected by
+cross-validated macro F1. Exact metric tables are generated when the notebook
+is run; they are not duplicated here to avoid stale or unverifiable figures.
 
-This project is built with Python and several key data science libraries:
+Although the notebook retains some imports from earlier experiments (including
+XGBoost, SVM, gradient boosting, and scikit-learn's `MLPClassifier`), those
+models are not part of the final comparison described above.
 
-*   [Python](https://www.python.org/)
-*   [Scikit-learn](https://scikit-learn.org/)
-*   [Pandas](https://pandas.pydata.org/)
-*   [NumPy](https://numpy.org/)
-*   [Matplotlib](https://matplotlib.org/)
+## Technology
 
----
+The implemented workflow primarily uses:
 
-## Getting Started
+- Python
+- pandas and NumPy
+- scikit-learn
+- LightGBM
+- SciPy
+- Matplotlib and seaborn
+- Jupyter
 
-To get a local copy up and running, follow these simple steps.
+TensorFlow and Keras are not used by the repository. There is also no
+blood-smear image model or OpenCV processing pipeline in the current project.
 
-### Prerequisites
+## Setup
 
-Make sure you have Python 3.8+ and `pip` installed on your system.
+Python 3.11 or another version compatible with the pinned dependencies is
+recommended.
 
-### Installation
+```sh
+git clone https://github.com/edwardopare/MalTy-ML.git
+cd MalTy-ML
+python -m venv .venv
+```
 
-1.  **Clone the repository**
-    ```sh
-    git clone https://github.com/your-username/Malaria-Typhoid-ML.git
-    cd Malaria-Typhoid-ML
-    ```
+Activate the environment:
 
-2.  **Create and activate a virtual environment** (recommended)
-    ```sh
-    # For Windows
-    python -m venv venv
-    .\venv\Scripts\activate
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+```
 
-    # For macOS/Linux
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
+```sh
+# macOS or Linux
+source .venv/bin/activate
+```
 
-3.  **Install required packages**
-    *(You should create a `requirements.txt` file for your project)*
-    ```sh
-    pip install tensorflow scikit-learn pandas numpy matplotlib opencv-python
-    ```
+Install the repository's pinned environment:
 
----
----
+```sh
+python -m pip install -r requirement.txt
+```
 
-## Dataset
+Start Jupyter and open the notebooks from the repository:
 
-Both the malaria and typhoid detection models were trained on synthetically generated datasets based on clinical symptoms.
+```sh
+jupyter notebook
+```
 
----
----
+The modelling notebook resolves the dataset path when run from either the
+repository root or the `modelling` directory.
 
-## Results
+## Results and interpretation
 
-Provide a summary of your model's performance.
+The saved notebook identifies Logistic Regression as the strongest candidate
+by cross-validated macro F1 within this synthetic benchmark. This result shows
+how well the model recovers patterns encoded by the data generator; it does
+not demonstrate diagnostic performance in real patients.
 
-**Malaria Model Performance:**
-| Metric    | Accuracy | Precision | Recall | F1-Score |
-|-----------|----------|-----------|--------|----------|
-| **Value** | 96%      | 95%       | 97%    | 96%      |
+Important limitations include:
 
-**Typhoid Model Performance:**
-| Metric    | Accuracy | Precision | Recall | F1-Score |
-|-----------|----------|-----------|--------|----------|
-| **Value** | 88%      | 85%       | 90%    | 87%      |
+- all records come from a single synthetic generation process;
+- the target set has no `Neither` or other-febrile-illness class;
+- important clinical variables and laboratory confirmation are absent;
+- there is no external, temporal, or site-level validation;
+- probabilities have not been clinically calibrated; and
+- no decision threshold has been evaluated against real clinical harms.
 
+Before any clinical use could be considered, the workflow would require
+representative and ethically governed patient data, laboratory-confirmed
+reference labels, external validation, calibration and subgroup analysis, and
+prospective safety evaluation.
 
----
+## Contributors
 
-## Contributing
-
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
----
+- Edward Opare-Yeboah
+- Prince Acquah Rockson
+- Eric Sena Semordzi
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-## 📫 Contact
-
-* Edward Opare-Yeboah - edwop68@gmail.com
-* Prince Acquah Rockson - parockson@gmail.com
-* Eric Sena Semordzi - esemordzi001@st.ug.edu.gh
-
-
-Project Link: https://github.com/edwardopare/MalTy-ML
+No license file is currently included in this repository. Unless one is added,
+do not assume that the project is distributed under the MIT License.
